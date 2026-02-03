@@ -16,7 +16,7 @@ Instead, adapters must be built from source and installed manually.
 This repository solves that by providing:
 - a **portable installer format**
 - a **versioned distribution model**
-- a **GitHub Pages download interface** (Codeplay-style)
+- a **GitHub Pages download interface**
 - a clean path to support **multiple backends, OSes, and oneAPI versions**
 
 ---
