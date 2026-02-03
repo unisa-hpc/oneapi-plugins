@@ -6,6 +6,8 @@ This repository provides a **reproducible workflow** to build and distribute
 The installers embed the required shared libraries (`.so`) as a **base64-encoded payload**
 and install them directly into a versioned oneAPI compiler directory.
 
+---
+
 ## Repository layout
 
 ```
