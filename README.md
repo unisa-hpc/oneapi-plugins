@@ -6,21 +6,6 @@ This repository provides a **reproducible workflow** to build and distribute
 The installers embed the required shared libraries (`.so`) as a **base64-encoded payload**
 and install them directly into a versioned oneAPI compiler directory.
 
----
-
-## What this repository is for
-
-Intel oneAPI no longer ships prebuilt CUDA/HIP adapters in binary form.
-Instead, adapters must be built from source and installed manually.
-
-This repository solves that by providing:
-- a **portable installer format**
-- a **versioned distribution model**
-- a **GitHub Pages download interface**
-- a clean path to support **multiple backends, OSes, and oneAPI versions**
-
----
-
 ## Repository layout
 
 ```
