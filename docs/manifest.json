@@ -11,6 +11,16 @@
       "tag": "v2025.3",
       "filename": "oneapi-ur-cuda-linux-x86_64-2025.3.sh",
       "sha256": "8cbf18ab93bb1f2b2145aa591814778f1434e46603641f9b13f6fc70f2f531dc"
-    }
+    },
+		{
+      "backend": "hip",
+      "vendor": "amd",
+	    "oneapi_version": "2025.3",
+      "os": "linux",
+      "arch": "x86_64",
+      "tag": "v2025.3",
+      "filename": "oneapi-ur-hip-linux-x86_64-2025.3.sh",
+    "	sha256": "PUT_SHA256_HERE"
+		}
   ]
 }
