@@ -1,1 +1,54 @@
-<h1>Loading...</h1>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>oneAPI NVIDIA UR Adapter Download</title>
+</head>
+<body style="font-family:system-ui;max-width:900px;margin:40px auto;padding:0 16px;">
+  <h1>Download oneAPI NVIDIA UR Adapter Installer</h1>
+  <p>Select your oneAPI version and download the installer.</p>
+
+  <label>oneAPI version:
+    <select id="oneapi"></select>
+  </label>
+
+  <p>
+    <a id="download" href="#" style="display:inline-block;padding:10px 14px;border:1px solid #000;border-radius:10px;text-decoration:none;">
+      Download
+    </a>
+  </p>
+
+  <pre id="cmd" style="padding:12px;border:1px solid #ddd;border-radius:10px;overflow:auto;"></pre>
+
+<script>
+async function main(){
+  const m = await (await fetch("./manifest.json",{cache:"no-store"})).json();
+  const sel = document.getElementById("oneapi");
+  const versions = [...new Set(m.items.map(x => x.oneapi_version))].sort();
+  versions.forEach(v => {
+    const o=document.createElement("option");
+    o.value=v; o.textContent=v;
+    sel.appendChild(o);
+  });
+
+  function assetUrl(item){
+    return `https://github.com/${m.owner}/${m.repo}/releases/download/${item.tag}/${encodeURIComponent(item.filename)}`;
+  }
+  function refresh(){
+    const v = sel.value;
+    const item = m.items.find(x => x.oneapi_version === v);
+    const url = assetUrl(item);
+    document.getElementById("download").href = url;
+    document.getElementById("cmd").textContent =
+`curl -L -O "${url}"
+chmod +x "${item.filename}"
+./"${item.filename}" --oneapi-root /opt/intel/oneapi`;
+  }
+  sel.addEventListener("change", refresh);
+  refresh();
+}
+main();
+</script>
+</body>
+</html>

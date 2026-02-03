@@ -1,0 +1,11 @@
+{
+  "owner": "unisa-hpc",
+  "repo": "oneapi-ur-adapter",
+  "items": [
+    {
+      "oneapi_version": "2025.3",
+      "tag": "v0.1.0",
+      "filename": "oneapi-ur-cuda-adapter-installer-2025.3.sh"
+    }
+  ]
+}
