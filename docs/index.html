@@ -3,41 +3,92 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>oneAPI UR Adapters Download</title>
+  <title>oneAPI Plugins</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,500,700,900&subset=latin,latin-ext" type="text/css">
   <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:980px;margin:40px auto;padding:0 16px}
-    .card{border:1px solid #ddd;border-radius:14px;padding:16px}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Lato',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:linear-gradient(180deg,#888C9B28 0%,#fff 360px);min-height:100vh;color:#222}
+
+    /* ── Header ── */
+    .header{background:#fff;padding:40px 16px 36px;text-align:center}
+    .header a{display:inline-block}
+    .header img{height:48px;width:auto;margin-bottom:14px}
+    .header h1{color:#220473;font-size:1.65rem;font-weight:300;letter-spacing:.02em}
+    .header p{color:#888C9B;font-size:.92rem;margin-top:8px;max-width:620px;margin-left:auto;margin-right:auto}
+
+    /* ── Main container ── */
+    .container{max-width:920px;margin:0 auto;padding:0 16px}
+
+    /* ── Card ── */
+    .card{background:#220473 radial-gradient(ellipse at 60% 50%,#4308E5 0%,#220473 70%) no-repeat;border-radius:14px;padding:20px 22px;margin-top:-28px;position:relative;box-shadow:0 4px 24px rgba(34,4,115,.15)}
+
+    /* ── Grid ── */
     .grid{display:grid;grid-template-columns:1fr;gap:12px}
     @media(min-width:860px){.grid{grid-template-columns:repeat(5,1fr)}}
-    label{font-weight:600;display:block;margin:0 0 6px}
-    select{width:100%;padding:10px;border-radius:10px;border:1px solid #bbb}
-    a.btn{display:inline-block;margin-top:12px;padding:10px 14px;border-radius:10px;border:1px solid #000;text-decoration:none}
-    pre{margin-top:12px;padding:12px;border-radius:12px;border:1px solid #ddd;overflow:auto}
-    .warn{color:#b45309;font-weight:700}
-    .muted{color:#555}
+
+    /* ── Form elements ── */
+    label{font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;color:#cacbd2;display:block;margin:0 0 6px}
+    select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #cacbd2;font-family:inherit;font-size:.9rem;color:#222;background:#fff;transition:border-color .15s}
+    select:focus{outline:none;border-color:#4308E5;box-shadow:0 0 0 3px rgba(67,8,229,.12)}
+
+    /* ── Buttons ── */
+    .actions{margin-top:16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+    a.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 22px;border-radius:999px;font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;text-decoration:none;transition:background .15s,color .15s,box-shadow .15s}
+    a.btn-primary{background:#FF4A3B;color:#fff;border:none;box-shadow:0 2px 8px rgba(255,74,59,.25)}
+    a.btn-primary:hover{background:#e03a2c;box-shadow:0 4px 14px rgba(255,74,59,.35)}
+    a.btn-secondary{background:#fff;color:#4308E5;border:1.5px solid #4308E5}
+    a.btn-secondary:hover{background:#4308E5;color:#fff}
+
+    /* ── Code block ── */
+    pre{margin-top:14px;padding:14px 16px;border-radius:10px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.1);overflow-x:auto;font-size:.85rem;line-height:1.55;color:#fff}
+    code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+
+    /* ── Utilities ── */
+    .warn{color:#FF4A3B;font-weight:700;font-size:.88rem}
+    .muted{color:#cacbd2;font-size:.88rem}
+    .tip{margin-top:12px;color:#cacbd2}
+    .tip code{background:rgba(255,255,255,.12);padding:2px 6px;border-radius:4px;font-size:.82rem;color:#fff}
+
+    /* ── Footer ── */
+    .footer{text-align:center;padding:32px 16px 24px;color:#888C9B;font-size:.8rem}
+    .footer a{color:#4308E5;text-decoration:none}
+    .footer a:hover{text-decoration:underline}
   </style>
 </head>
 <body>
-  <h1>Download oneAPI UR Adapters</h1>
-  <p class="muted">Choose configuration and download the matching installer. Add new backends/OS/versions by editing <code>manifest.json</code> only.</p>
 
-  <div class="card">
-    <div class="grid">
-      <div><label for="oneapi">oneAPI</label><select id="oneapi"></select></div>
-      <div><label for="vendor">Vendor</label><select id="vendor"></select></div>
-      <div><label for="backend">Backend</label><select id="backend"></select></div>
-      <div><label for="os">OS</label><select id="os"></select></div>
-      <div><label for="arch">Arch</label><select id="arch"></select></div>
+  <div class="header">
+    <a href="https://uxlfoundation.org" target="_blank" rel="noreferrer">
+      <img src="https://uxlfoundation.org/images/uxl-color.svg" alt="UXL Foundation">
+    </a>
+    <h1>Download oneAPI UR Adapters</h1>
+    <p>Choose a configuration and download the matching installer. Add new backends, OS, or versions by editing <code style="background:#f4f2fa;padding:1px 5px;border-radius:4px;color:#453cbc">manifest.json</code> only.</p>
+  </div>
+
+  <div class="container">
+    <div class="card">
+      <div class="grid">
+        <div><label for="oneapi">oneAPI</label><select id="oneapi"></select></div>
+        <div><label for="vendor">Vendor</label><select id="vendor"></select></div>
+        <div><label for="backend">Backend</label><select id="backend"></select></div>
+        <div><label for="os">OS</label><select id="os"></select></div>
+        <div><label for="arch">Arch</label><select id="arch"></select></div>
+      </div>
+
+      <div class="actions">
+        <a id="downloadBtn" class="btn btn-primary" href="#">Download</a>
+        <a id="releaseBtn" class="btn btn-secondary" href="#" target="_blank" rel="noreferrer">View release</a>
+        <span id="status" class="warn"></span>
+      </div>
+
+      <pre><code id="cmd"></code></pre>
+      <p class="muted tip">Tip: <code>chmod +x file.sh &amp;&amp; ./file.sh --oneapi-root /opt/intel/oneapi</code></p>
     </div>
+  </div>
 
-    <div style="margin-top:10px">
-      <a id="downloadBtn" class="btn" href="#">Download</a>
-      <a id="releaseBtn" class="btn" href="#" target="_blank" rel="noreferrer">View release</a>
-      <span id="status" class="warn" style="margin-left:10px"></span>
-    </div>
-
-    <pre><code id="cmd"></code></pre>
-    <p class="muted">Tip: <code>chmod +x file.sh &amp;&amp; ./file.sh --oneapi-root /opt/intel/oneapi</code></p>
+  <div class="footer">
+    Community project supported by the  <a href="https://uxlfoundation.org" target="_blank" rel="noreferrer">UXL Foundation</a>.<br>
+    Copyright © 2025 Unified Acceleration Foundation. All rights reserved. Unified Acceleration Foundation is a Joint Development Foundation Project.
   </div>
 
 <script>
