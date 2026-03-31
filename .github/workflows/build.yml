@@ -1,0 +1,73 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - ONEAPI_VERSION: "2025.2"
+            SYCL_VERSION: "6.2.1"
+          - ONEAPI_VERSION: "2025.3"
+            SYCL_VERSION: "6.3.0"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.6
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.6"
+
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v2
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+
+      - name: Build
+        run: |
+          python build-ur-adapter.py --cuda --branch v${{ matrix.SYCL_VERSION }} --oneapi-version ${{ matrix.ONEAPI_VERSION }} --stub ./oneapi-ur-adapter-stub.sh -j$(nproc)
+
+      - name: Archive artifacts
+        run: |
+          mkdir -p artifacts
+          cp -r output/* artifacts/
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.ONEAPI_VERSION }}-${{ matrix.SYCL_VERSION }}
+          path: artifacts/
+
+  release:
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: collected-artifacts
+
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: release-${{ github.run_number }}
+          name: Release ${{ github.run_number }}
+          draft: false
+          prerelease: false
+          files: collected-artifacts/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
