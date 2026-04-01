@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
 
     strategy:
       matrix:
@@ -65,16 +65,16 @@ jobs:
 
       - name: Install CUDA Toolkit
         run: |
-          sudo apt-get install -y wget gnupg libtinfo6
+          sudo apt-get install -y wget gnupg libtinfo5
 
           wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
           sudo dpkg -i cuda-keyring_1.1-1_all.deb
           sudo apt-get update
 
-          sudo apt-get install -y cuda-toolkit-12-4
+          sudo apt-get install -y cuda-toolkit-12-2
 
-          echo "PATH=/usr/local/cuda-12.4/bin:$PATH" >> $GITHUB_ENV
-          echo "LD_LIBRARY_PATH=/usr/local/cuda-12.4/lib64:$LD_LIBRARY_PATH" >> $GITHUB_ENV
+          echo "PATH=/usr/local/cuda-12.2/bin:$PATH" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: |
