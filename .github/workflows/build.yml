@@ -88,17 +88,12 @@ jobs:
             --oneapi-version ${{ matrix.ONEAPI_VERSION }} \
             --stub ./oneapi-ur-adapter.stub.sh \
             -j$(nproc)
-
-      - name: Archive artifacts
-        run: |
-          mkdir -p artifacts
-          cp -r output/* artifacts/
       
-      - name: Upload artifacts
+      - name: Upload installer
         uses: actions/upload-artifact@v4
         with:
-          name: build-oneapi${{ matrix.ONEAPI_VERSION }}
-          path: artifacts/
+          name: oneapi-ur-cuda-linux-x86_64-${{ matrix.ONEAPI_VERSION }}.sh
+          path: work_ur_build/out/
 
   release:
     needs: build
