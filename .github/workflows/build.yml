@@ -53,6 +53,10 @@ jobs:
           echo "PATH=/usr/local/cuda-12.4/bin:$PATH" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=/usr/local/cuda-12.4/lib64:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
+      - name: Install dependencies
+        run: |
+          sudo apt-get install -y libhwloc-dev
+
       - name: Build
         run: |
           python build_adapter.py --cuda --branch v${{ matrix.SYCL_VERSION }} --oneapi-version ${{ matrix.ONEAPI_VERSION }} --stub ./oneapi-ur-adapter-stub.sh -j$(nproc)
