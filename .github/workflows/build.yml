@@ -82,7 +82,12 @@ jobs:
 
       - name: Build
         run: |
-          python build_adapter.py --cuda --branch v${{ matrix.SYCL_VERSION }} --oneapi-version ${{ matrix.ONEAPI_VERSION }} --stub ./oneapi-ur-adapter-stub.sh -j$(nproc)
+          python build_adapter.py \
+            --cuda \
+            --branch v${{ matrix.SYCL_VERSION }} \
+            --oneapi-version ${{ matrix.ONEAPI_VERSION }} \
+            --stub ./oneapi-ur-adapter.stub.sh \
+            -j$(nproc)
 
       - name: Archive artifacts
         run: |
