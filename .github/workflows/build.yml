@@ -50,7 +50,7 @@ jobs:
 
           sudo apt-get install -y cuda-compiler-12-4 cuda-libraries-dev-12-4
 
-          echo "/usr/local/cuda-12.4/bin" >> $GITHUB_PATH
+          echo "PATH=/usr/local/cuda-12.4/bin:$PATH" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=/usr/local/cuda-12.4/lib64:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
       - name: Build
