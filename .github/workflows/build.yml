@@ -81,7 +81,9 @@ jobs:
           sudo apt-get install -y libhwloc-dev
 
       - name: Build
+        # The sed command is an hacky workaround but gets the job done for now
         run: |
+          sed -i 's/^COMPILER_VERSION="2025\.3"$/COMPILER_VERSION="${{ matrix.ONEAPI_VERSION }}"/' ./oneapi-ur-adapter.stub.sh
           python build_adapter.py \
             --cuda \
             --branch v${{ matrix.SYCL_VERSION }} \
