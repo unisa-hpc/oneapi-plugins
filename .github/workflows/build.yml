@@ -8,7 +8,10 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+
+    container:
+      image: ubuntu:18.04
 
     strategy:
       matrix:
@@ -23,62 +26,55 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           df -h
-          sudo apt-get remove -y '^dotnet-.*'
-          sudo apt-get remove -y '^llvm-.*'
-          sudo apt-get remove -y 'php.*'
-          sudo apt-get remove -y '^mongodb-.*'
-          sudo apt-get remove -y '^mysql-.*'
-          sudo apt-get remove -y azure-cli google-cloud-cli google-chrome-stable firefox powershell mono-devel libgl1-mesa-dri
-          sudo apt-get autoremove -y
-          sudo apt-get clean
+          apt-get remove -y '^dotnet-.*'
+          apt-get remove -y '^llvm-.*'
+          apt-get remove -y 'php.*'
+          apt-get remove -y '^mongodb-.*'
+          apt-get remove -y '^mysql-.*'
+          apt-get remove -y azure-cli google-cloud-cli google-chrome-stable firefox powershell mono-devel libgl1-mesa-dri
+          apt-get autoremove -y
+          apt-get clean
           df -h
-          sudo rm -rf /usr/local/lib/android || true
-          sudo rm -rf /usr/share/dotnet || true
-          sudo rm -rf /opt/ghc || true
-          sudo rm -rf /usr/local/.ghcup || true
-          sudo rm -rf /opt/hostedtoolcache/CodeQL || true
-          sudo docker system prune --all --volumes --force
-          sudo apt-get clean
-          sudo rm -rf /var/lib/apt/lists/*
+          rm -rf /usr/local/lib/android || true
+          rm -rf /usr/share/dotnet || true
+          rm -rf /opt/ghc || true
+          rm -rf /usr/local/.ghcup || true
+          rm -rf /opt/hostedtoolcache/CodeQL || true
+          docker system prune --all --volumes --force
+          apt-get clean
+          rm -rf /var/lib/apt/lists/*
           df -h
 
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.11"
-
       - name: Update dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get upgrade -y
+          apt-get update
+          apt-get upgrade -y
 
-      - name: Install GCC 12
+      - name: Install GCC
         run: |
-          sudo apt-get install -y gcc-12 g++-12
-          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 100
-          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 100
-          echo "CC=gcc-12" >> $GITHUB_ENV
-          echo "CXX=g++-12" >> $GITHUB_ENV
+          apt-get install -y gcc g++
+          echo "CC=gcc" >> $GITHUB_ENV
+          echo "CXX=g++" >> $GITHUB_ENV
 
       - name: Install CUDA Toolkit
         run: |
-          sudo apt-get install -y wget gnupg libtinfo5
+          apt-get install -y wget gnupg libtinfo5
 
           wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
-          sudo dpkg -i cuda-keyring_1.1-1_all.deb
-          sudo apt-get update
+          dpkg -i cuda-keyring_1.1-1_all.deb
+          apt-get update
 
-          sudo apt-get install -y cuda-toolkit-12-2
+          apt-get install -y cuda-toolkit-12-2
 
           echo "PATH=/usr/local/cuda-12.2/bin:$PATH" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: |
-          sudo apt-get install -y libhwloc-dev
+          apt-get install -y libhwloc-dev python3
 
       - name: Build
         # The sed command is an hacky workaround but gets the job done for now
