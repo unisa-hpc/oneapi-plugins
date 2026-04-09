@@ -64,7 +64,7 @@ def cmake_build_ur(
     # UR CMake options
     cmake_args = [
         "cmake",
-        "..",
+        str(ur_src),
         # "-S", str(ur_src),
         # "-B", str(build_dir),
         "-DUR_BUILD_TESTS=OFF",
