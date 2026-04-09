@@ -76,9 +76,7 @@ def cmake_build_ur(
         f"-DCMAKE_INSTALL_PREFIX={install_prefix}",
     ]
 
-    run(["mkdir", str(build_dir)])
-    run(["cd", str(build_dir)])
-    run(cmake_args, cwd=str(llvm_dir))
+    run(cmake_args, cwd=str(build_dir))
     # run(["cmake", "--build", str(build_dir), "-j", str(jobs)], cwd=str(llvm_dir))
     run(["make", "-j", str(jobs)], cwd=str(build_dir))
     # run(["cmake", "--install", str(build_dir)], cwd=str(llvm_dir))
