@@ -27,8 +27,8 @@ jobs:
           apt-get update
           apt-get upgrade -y
           apt-get install -y gcc g++ libhwloc-dev python3 git ca-certificates wget gnupg libtinfo5 cmake
-          wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
-          dpkg -i cuda-keyring_1.1-1_all.deb
+          wget --no-verbose -O /cuda-keyring_1.1-1_all.deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
+          dpkg -i /cuda-keyring_1.1-1_all.deb
           apt-get update
           apt-get install -y cuda-toolkit-12-2
           echo "PATH=/usr/local/cuda-12.2/bin:${PATH}" >> ${GITHUB_ENV}

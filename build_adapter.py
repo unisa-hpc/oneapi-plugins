@@ -64,8 +64,9 @@ def cmake_build_ur(
     # UR CMake options
     cmake_args = [
         "cmake",
-        "-S", str(ur_src),
-        "-B", str(build_dir),
+        "..",
+        # "-S", str(ur_src),
+        # "-B", str(build_dir),
         "-DUR_BUILD_TESTS=OFF",
         "-DUR_ENABLE_TRACING=ON",
         "-DUR_BUILD_ADAPTER_OPENCL=ON",
@@ -75,9 +76,13 @@ def cmake_build_ur(
         f"-DCMAKE_INSTALL_PREFIX={install_prefix}",
     ]
 
+    run(["mkdir", str(build_dir)])
+    run(["cd", str(build_dir)])
     run(cmake_args, cwd=str(llvm_dir))
-    run(["cmake", "--build", str(build_dir), "-j", str(jobs)], cwd=str(llvm_dir))
-    run(["cmake", "--install", str(build_dir)], cwd=str(llvm_dir))
+    # run(["cmake", "--build", str(build_dir), "-j", str(jobs)], cwd=str(llvm_dir))
+    run(["make", "-j", str(jobs)], cwd=str(build_dir))
+    # run(["cmake", "--install", str(build_dir)], cwd=str(llvm_dir))
+    run(["make", "install"], cwd=str(build_dir))
 
 
 def make_payload_tar_gz(ur_install: Path, out_tar_gz: Path):
