@@ -47,6 +47,7 @@ jobs:
       - name: Build
         # The sed command is an hacky workaround but gets the job done for now
         run: |
+          cd ${GITHUB_REPOSITORY#*/}
           sed -i 's/^COMPILER_VERSION="2025\.3"$/COMPILER_VERSION="${{ matrix.ONEAPI_VERSION }}"/' ./oneapi-ur-adapter.stub.sh
           python3 build_adapter.py \
             --cuda \
