@@ -37,8 +37,8 @@ jobs:
       - name: Checkout
         run: |
           git config --global --add safe.directory '*'
-          mkdir ${GITHUB_REPOSITORY}
-          cd ${GITHUB_REPOSITORY}
+          mkdir ${GITHUB_REPOSITORY#*/}
+          cd ${GITHUB_REPOSITORY#*/}
           git init
           git remote add origin https://github.com/${GITHUB_REPOSITORY}.git
           git fetch --depth=1 origin $GITHUB_SHA
