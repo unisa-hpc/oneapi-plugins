@@ -22,39 +22,23 @@ jobs:
             SYCL_VERSION: "6.3.0"
 
     steps:
-      - name: Update dependencies
+      - name: Install dependencies
         run: |
           apt-get update
           apt-get upgrade -y
-
-      - name: Install GCC
-        run: |
-          apt-get install -y gcc g++
-          echo "CC=gcc" >> $GITHUB_ENV
-          echo "CXX=g++" >> $GITHUB_ENV
-
-      - name: Install CUDA Toolkit
-        run: |
-          apt-get install -y wget gnupg libtinfo5
-
+          apt-get install -y gcc g++ libhwloc-dev python3 git ca-certificates wget gnupg libtinfo5 cmake
           wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
           dpkg -i cuda-keyring_1.1-1_all.deb
           apt-get update
-
           apt-get install -y cuda-toolkit-12-2
-
           echo "PATH=/usr/local/cuda-12.2/bin:$PATH" >> $GITHUB_ENV
           echo "LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64:$LD_LIBRARY_PATH" >> $GITHUB_ENV
 
-      - name: Install dependencies
-        run: |
-          apt-get install -y libhwloc-dev python3
-
       - name: Checkout
         run: |
-          apt-get update
-          apt-get install -y git ca-certificates
-
+          git config --global --add safe.directory '*'
+          mkdir ${GITHUB_REPOSITORY}
+          cd ${GITHUB_REPOSITORY}
           git init
           git remote add origin https://github.com/${GITHUB_REPOSITORY}.git
           git fetch --depth=1 origin $GITHUB_SHA
@@ -64,7 +48,7 @@ jobs:
         # The sed command is an hacky workaround but gets the job done for now
         run: |
           sed -i 's/^COMPILER_VERSION="2025\.3"$/COMPILER_VERSION="${{ matrix.ONEAPI_VERSION }}"/' ./oneapi-ur-adapter.stub.sh
-          python build_adapter.py \
+          python3 build_adapter.py \
             --cuda \
             --branch v${{ matrix.SYCL_VERSION }} \
             --oneapi-version ${{ matrix.ONEAPI_VERSION }} \
