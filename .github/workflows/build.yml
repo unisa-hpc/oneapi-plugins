@@ -33,10 +33,10 @@ jobs:
           apt-get install -y cuda-toolkit-12-2
           echo "PATH=/usr/local/cuda-12.2/bin:${PATH}" >> ${GITHUB_ENV}
           echo "LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64:${LD_LIBRARY_PATH}" >> ${GITHUB_ENV}
-          wget --no-verbose -O /cmake-3.25.4.tar.gz https://github.com/Kitware/CMake/releases/download/v3.25.4/cmake-3.25.4.tar.gz
-          tar -xzf /cmake-3.25.4.tar.gz
-          cd /cmake-3.25.4
-          ./bootstrap --prefix=/usr/local
+          wget --no-verbose -O /cmake-3.25.3.tar.gz https://github.com/Kitware/CMake/releases/download/v3.25.3/cmake-3.25.3.tar.gz
+          tar -xzf /cmake-3.25.3.tar.gz
+          cd /cmake-3.25.3
+          ./bootstrap --prefix=/user/local
           make -j$(nproc)
           make install
 
