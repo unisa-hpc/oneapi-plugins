@@ -27,7 +27,7 @@ jobs:
           cd /
           apt-get update
           apt-get upgrade -y
-          apt-get install -y gcc g++ libhwloc-dev python3 git ca-certificates wget gnupg libtinfo5
+          apt-get install -y gcc g++ libhwloc-dev python3 git ca-certificates wget gnupg libtinfo5 libssl-dev
           wget --no-verbose -O /cuda-keyring_1.1-1_all.deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
           dpkg -i /cuda-keyring_1.1-1_all.deb
           apt-get update
