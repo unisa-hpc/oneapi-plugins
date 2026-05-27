@@ -24,6 +24,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
+          cd /
           apt-get update
           apt-get upgrade -y
           apt-get install -y gcc g++ libhwloc-dev python3 git ca-certificates wget gnupg libtinfo5
