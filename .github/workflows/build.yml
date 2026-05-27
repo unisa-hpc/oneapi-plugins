@@ -40,6 +40,12 @@ jobs:
           ./bootstrap --prefix=/usr/local
           make -j$(nproc)
           make install
+          wget --no-verbose -O /hwloc-2.3.0.tar.gz https://download.open-mpi.org/release/hwloc/v2.3/hwloc-2.3.0.tar.gz
+          tar -xzf /hwloc-2.3.0.tar.gz
+          cd /hwloc-2.3.0
+          ./configure --prefix=/usr/local
+          make -j$(nproc)
+          make install
 
       - name: Checkout
         run: |
