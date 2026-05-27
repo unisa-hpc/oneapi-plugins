@@ -36,7 +36,7 @@ jobs:
           wget --no-verbose -O /cmake-3.25.3.tar.gz https://github.com/Kitware/CMake/releases/download/v3.25.3/cmake-3.25.3.tar.gz
           tar -xzf /cmake-3.25.3.tar.gz
           cd /cmake-3.25.3
-          ./bootstrap --prefix=/user/local
+          ./bootstrap --prefix=/usr/local
           make -j$(nproc)
           make install
 
