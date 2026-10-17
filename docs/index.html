@@ -11,16 +11,17 @@
 
     /* ── Header ── */
     .header{background:#fff;padding:40px 16px 36px;text-align:center}
-    .header a{display:inline-block}
-    .header img{height:48px;width:auto;margin-bottom:14px}
-    .header h1{color:#220473;font-size:1.65rem;font-weight:300;letter-spacing:.02em}
+    .uni-logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;margin-bottom:14px}
+    .uni-logo-mark{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:#1B3C59;border:2px solid #F2A900;color:#fff;font-weight:900;font-size:.62rem;letter-spacing:.01em}
+    .uni-logo-text{color:#1B3C59;font-weight:700;font-size:.95rem;letter-spacing:.01em}
+    .header h1{color:#1B3C59;font-size:1.65rem;font-weight:300;letter-spacing:.02em}
     .header p{color:#888C9B;font-size:.92rem;margin-top:8px;max-width:620px;margin-left:auto;margin-right:auto}
 
     /* ── Main container ── */
     .container{max-width:920px;margin:0 auto;padding:0 16px}
 
     /* ── Card ── */
-    .card{background:#220473 radial-gradient(ellipse at 60% 50%,#4308E5 0%,#220473 70%) no-repeat;border-radius:14px;padding:20px 22px;margin-top:-28px;position:relative;box-shadow:0 4px 24px rgba(34,4,115,.15)}
+    .card{background:#1B3C59 radial-gradient(ellipse at 60% 50%,#2C5278 0%,#1B3C59 70%) no-repeat;border-radius:14px;padding:20px 22px;margin-top:-28px;position:relative;box-shadow:0 4px 24px rgba(27,60,89,.18)}
 
     /* ── Grid ── */
     .grid{display:grid;grid-template-columns:1fr;gap:12px}
@@ -31,43 +32,44 @@
     .vendor-label{display:block;margin:0 0 8px;font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff}
     .vendor-toggle{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%}
     .vendor-btn{width:100%;appearance:none;border:1.5px solid #fff;background:transparent;color:#fff;border-radius:999px;padding:8px 16px;font-size:.82rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
-    .vendor-btn:hover{border-color:#FF4A3B;color:#FF4A3B}
-    .vendor-btn.active{background:#FF4A3B;border-color:#FF4A3B;color:#fff}
+    .vendor-btn:hover{border-color:#F2A900;color:#F2A900}
+    .vendor-btn.active{background:#F2A900;border-color:#F2A900;color:#1B3C59}
 
     /* ── Form elements ── */
     label{font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;color:#cacbd2;display:block;margin:0 0 6px}
     select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #cacbd2;font-family:inherit;font-size:.9rem;color:#222;background:#fff;transition:border-color .15s}
-    select:focus{outline:none;border-color:#4308E5;box-shadow:0 0 0 3px rgba(67,8,229,.12)}
+    select:focus{outline:none;border-color:#2C5278;box-shadow:0 0 0 3px rgba(44,82,120,.15)}
 
     /* ── Buttons ── */
     .actions{margin-top:16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
     a.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 22px;border-radius:999px;font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;text-decoration:none;transition:background .15s,color .15s,box-shadow .15s}
-    a.btn-primary{background:#FF4A3B;color:#fff;border:none;box-shadow:0 2px 8px rgba(255,74,59,.25)}
-    a.btn-primary:hover{background:#e03a2c;box-shadow:0 4px 14px rgba(255,74,59,.35)}
-    a.btn-secondary{background:#fff;color:#4308E5;border:1.5px solid #4308E5}
-    a.btn-secondary:hover{background:#4308E5;color:#fff}
+    a.btn-primary{background:#F2A900;color:#1B3C59;border:none;box-shadow:0 2px 8px rgba(242,169,0,.3)}
+    a.btn-primary:hover{background:#cc7a00;box-shadow:0 4px 14px rgba(204,122,0,.4)}
+    a.btn-secondary{background:#fff;color:#2C5278;border:1.5px solid #2C5278}
+    a.btn-secondary:hover{background:#2C5278;color:#fff}
 
     /* ── Code block ── */
     pre{margin-top:14px;padding:14px 16px;border-radius:10px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.1);overflow-x:auto;font-size:.85rem;line-height:1.55;color:#fff}
     code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
 
     /* ── Utilities ── */
-    .warn{color:#FF4A3B;font-weight:700;font-size:.88rem}
+    .warn{color:#c9302c;font-weight:700;font-size:.88rem}
     .muted{color:#cacbd2;font-size:.88rem}
     .tip{margin-top:12px;color:#cacbd2}
     .tip code{background:rgba(255,255,255,.12);padding:2px 6px;border-radius:4px;font-size:.82rem;color:#fff}
 
     /* ── Footer ── */
     .footer{text-align:center;padding:32px 16px 24px;color:#888C9B;font-size:.8rem;max-width:630px;margin:0 auto}
-    .footer a{color:#4308E5;text-decoration:none}
+    .footer a{color:#2C5278;text-decoration:none}
     .footer a:hover{text-decoration:underline}
   </style>
 </head>
 <body>
 
   <div class="header">
-    <a href="https://uxlfoundation.org" target="_blank" rel="noreferrer">
-      <img src="https://uxlfoundation.org/images/uxl-color.svg" alt="UXL Foundation">
+    <a class="uni-logo" href="https://www.unisa.it" target="_blank" rel="noreferrer">
+      <span class="uni-logo-mark" aria-hidden="true">UNISA</span>
+      <span class="uni-logo-text">Università degli Studi di Salerno</span>
     </a>
     <h1>Download oneAPI Plugins</h1>
     <p>Choose a configuration and download the matching installer.</p>
@@ -101,13 +103,11 @@
   </div>
 
   <div class="footer">
-    <p>Community project supported by the <a href="https://uxlfoundation.org" target="_blank" rel="noreferrer">UXL Foundation</a> maintained by the University of Salerno. We would like to thank Intel and Argonne National Laboratory for their support in setting up the build infrastructure. 
+    <p>Developed and maintained by the <a href="https://www.unisa.it" target="_blank" rel="noreferrer">University of Salerno</a>. We would like to thank Intel and Argonne National Laboratory for their support in setting up the build infrastructure.
     </p>
     <p>SYCL is a trademark of the Khronos&reg; Group. Nvidia and CUDA are registered trademark of NVIDIA Corporation. AMD is a registered trademark of Advanced Micro Devices, Inc. Intel is a trademark of Intel Corporation in the U.S. and/or other countries.</p>
     <br>
-    <p>Copyright &copy; 2025 Unified Acceleration Foundation. All rights reserved.</p>
-    <p>Unified Acceleration Foundation is a <a href="https://jointdevelopment.org/">Joint Development Foundation Project</a></p>
-    <p><a href="https://jointdevelopment.org/policies/terms/">Privacy Policy and Terms of Use</a></p>
+    <p>Copyright &copy; 2025 University of Salerno. All rights reserved.</p>
   </div>
 
 <script>
