@@ -55,25 +55,25 @@ jobs:
           name: oneapi-ur-cuda-linux-x86_64-${{ matrix.ONEAPI_VERSION }}.sh
           path: work_ur_build/out/
 
-  # release:
-  #   needs: build
-  #   if: github.event_name == 'push'
-  #   runs-on: ubuntu-latest
+  release:
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Download all artifacts
-  #       uses: actions/download-artifact@v5
-  #       with:
-  #         path: collected-artifacts
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v5
+        with:
+          path: collected-artifacts
 
-  #     - name: Create Release
-  #       id: create_release
-  #       uses: softprops/action-gh-release@v2
-  #       with:
-  #         tag_name: release-${{ github.run_number }}
-  #         name: Release ${{ github.run_number }}
-  #         draft: false
-  #         prerelease: false
-  #         files: collected-artifacts/**/*
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: release-${{ github.run_number }}
+          name: Release ${{ github.run_number }}
+          draft: false
+          prerelease: false
+          files: collected-artifacts/**/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
