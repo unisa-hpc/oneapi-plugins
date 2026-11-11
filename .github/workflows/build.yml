@@ -6,14 +6,17 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  # Highest glibc the production machine provides; the build fails if libs need more.
+  MAX_GLIBC: "2.27"
+  BASE_IMAGE: "ubuntu:18.04"
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    container:
-      image: ubuntu:18.04
-
     strategy:
+      fail-fast: false
       matrix:
         include:
           - ONEAPI_VERSION: "2025.2"
@@ -22,51 +25,30 @@ jobs:
             SYCL_VERSION: "6.3.0"
 
     steps:
-      - name: Install dependencies
-        run: |
-          cd /
-          apt-get update
-          apt-get upgrade -y
-          apt-get install -y gcc g++ libhwloc-dev python3 git ca-certificates wget gnupg libtinfo5 libssl-dev
-          wget --no-verbose -O /cuda-keyring_1.1-1_all.deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
-          dpkg -i /cuda-keyring_1.1-1_all.deb
-          apt-get update
-          apt-get install -y cuda-toolkit-12-2
-          echo "PATH=/usr/local/cuda-12.2/bin:${PATH}" >> ${GITHUB_ENV}
-          echo "LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64:${LD_LIBRARY_PATH}" >> ${GITHUB_ENV}
-          wget --no-verbose -O /cmake-3.25.3.tar.gz https://github.com/Kitware/CMake/releases/download/v3.25.3/cmake-3.25.3.tar.gz
-          tar -xzf /cmake-3.25.3.tar.gz
-          cd /cmake-3.25.3
-          ./bootstrap --prefix=/usr/local
-          make -j$(nproc)
-          make install
-          cd /
-          wget --no-verbose -O /hwloc-2.3.0.tar.gz https://download.open-mpi.org/release/hwloc/v2.3/hwloc-2.3.0.tar.gz
-          tar -xzf /hwloc-2.3.0.tar.gz
-          cd /hwloc-2.3.0
-          ./configure --prefix=/usr/local
-          make -j$(nproc)
-          make install
-
       - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build toolchain image
         run: |
-          git config --global --add safe.directory '*'
-          git init
-          git remote add origin https://github.com/${GITHUB_REPOSITORY}.git
-          git fetch --depth=1 origin ${GITHUB_REF}
-          git checkout FETCH_HEAD
+          docker build -f Dockerfile.build --build-arg BASE_IMAGE=${BASE_IMAGE} -t ur-builder .
 
       - name: Build
         # The sed command is an hacky workaround but gets the job done for now
         run: |
           sed -i 's/^COMPILER_VERSION="2025\.3"$/COMPILER_VERSION="${{ matrix.ONEAPI_VERSION }}"/' ./oneapi-ur-adapter.stub.sh
-          python3 build_adapter.py \
-            --cuda \
-            --branch v${{ matrix.SYCL_VERSION }} \
-            --oneapi-version ${{ matrix.ONEAPI_VERSION }} \
-            --stub ./oneapi-ur-adapter.stub.sh \
-            -j$(nproc)
-      
+          docker run --rm -v "$PWD:/src" ur-builder \
+            python3 build_adapter.py \
+              --cuda \
+              --branch v${{ matrix.SYCL_VERSION }} \
+              --oneapi-version ${{ matrix.ONEAPI_VERSION }} \
+              --stub ./oneapi-ur-adapter.stub.sh \
+              -j$(nproc)
+
+      - name: Check glibc requirements
+        run: |
+          docker run --rm -v "$PWD:/src" ur-builder \
+            ./check_glibc.sh work_ur_build/ur-install/lib "${MAX_GLIBC}"
+
       - name: Upload installer
         uses: actions/upload-artifact@v4
         with:

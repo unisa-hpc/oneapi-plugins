@@ -1,0 +1,31 @@
+# Old-toolchain build environment. The base image's glibc caps the symbol
+# versions required by the resulting libur*.so (Ubuntu 18.04 -> glibc 2.27).
+ARG BASE_IMAGE=ubuntu:18.04
+FROM ${BASE_IMAGE}
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        gcc g++ make libhwloc-dev python3 git ca-certificates wget gnupg \
+        libtinfo5 libssl-dev binutils \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN wget --no-verbose -O /tmp/cuda-keyring.deb \
+        https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb \
+    && dpkg -i /tmp/cuda-keyring.deb \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends cuda-toolkit-12-2 \
+    && rm -rf /var/lib/apt/lists/* /tmp/cuda-keyring.deb
+ENV PATH=/usr/local/cuda-12.2/bin:${PATH} \
+    LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64
+
+RUN wget --no-verbose -O /tmp/cmake.tar.gz https://github.com/Kitware/CMake/releases/download/v3.25.3/cmake-3.25.3.tar.gz \
+    && tar -xzf /tmp/cmake.tar.gz -C /tmp && cd /tmp/cmake-3.25.3 \
+    && ./bootstrap --prefix=/usr/local && make -j"$(nproc)" && make install \
+    && rm -rf /tmp/cmake*
+
+RUN wget --no-verbose -O /tmp/hwloc.tar.gz https://download.open-mpi.org/release/hwloc/v2.3/hwloc-2.3.0.tar.gz \
+    && tar -xzf /tmp/hwloc.tar.gz -C /tmp && cd /tmp/hwloc-2.3.0 \
+    && ./configure --prefix=/usr/local && make -j"$(nproc)" && make install \
+    && rm -rf /tmp/hwloc*
+
+WORKDIR /src
