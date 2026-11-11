@@ -9,6 +9,7 @@ import tempfile
 from pathlib import Path
 import base64
 import glob
+import re
 
 
 def run(cmd, cwd=None, env=None):
@@ -125,7 +126,7 @@ def make_payload_tar_gz(ur_install: Path, out_tar_gz: Path):
 
 
 def build_installer_from_stub(
-    stub_path: Path, payload_tar_gz: Path, out_installer: Path
+    stub_path: Path, payload_tar_gz: Path, out_installer: Path, compiler_version: str
 ):
     if not stub_path.exists():
         raise RuntimeError(f"Stub installer not found: {stub_path}")
@@ -136,6 +137,16 @@ def build_installer_from_stub(
     marker = "__PAYLOAD_B64_BELOW__"
     if marker not in stub_text:
         raise RuntimeError(f"Stub missing marker line: {marker}")
+
+    stub_text, n = re.subn(
+        r'^COMPILER_VERSION="[^"]*"$',
+        f'COMPILER_VERSION="{compiler_version}"',
+        stub_text,
+        count=1,
+        flags=re.MULTILINE,
+    )
+    if n != 1:
+        raise RuntimeError('Stub missing COMPILER_VERSION="..." line')
 
     payload_bytes = payload_tar_gz.read_bytes()
     payload_b64 = base64.b64encode(payload_bytes).decode("ascii")
@@ -212,7 +223,7 @@ def main():
     ap.add_argument(
         "--oneapi-version",
         default="2025.3",
-        help="Used only to name the output installer file (you can customize naming)",
+        help="oneAPI compiler version: written into the installer (COMPILER_VERSION) and used in its file name",
     )
     ap.add_argument(
         "--os", dest="os_name", default="linux", help="Used only for naming"
@@ -287,7 +298,9 @@ def main():
 
     # Payload + installer
     make_payload_tar_gz(install_dir, payload_tar)
-    build_installer_from_stub(Path(args.stub).resolve(), payload_tar, out_installer)
+    build_installer_from_stub(
+        Path(args.stub).resolve(), payload_tar, out_installer, args.oneapi_version
+    )
 
     print("[+] Done.")
     print(f"    Installer: {out_installer}")

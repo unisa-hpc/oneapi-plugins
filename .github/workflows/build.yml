@@ -34,9 +34,7 @@ jobs:
           docker build -f Dockerfile.build -t ur-builder .
 
       - name: Build
-        # The sed command is an hacky workaround but gets the job done for now
         run: |
-          sed -i 's/^COMPILER_VERSION="2025\.3"$/COMPILER_VERSION="${{ matrix.ONEAPI_VERSION }}"/' ./oneapi-ur-adapter.stub.sh
           docker run --rm -v "$PWD:/src" ur-builder \
             python3 build_adapter.py \
               --cuda \
