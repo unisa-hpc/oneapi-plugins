@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build toolchain image
         run: |
@@ -53,7 +53,7 @@ jobs:
             ./check_glibc.sh work_ur_build/ur-install/lib "${MAX_GLIBC}"
 
       - name: Upload installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: oneapi-ur-cuda-linux-x86_64-${{ matrix.ONEAPI_VERSION }}.sh
           path: work_ur_build/out/
@@ -65,7 +65,7 @@ jobs:
 
   #   steps:
   #     - name: Download all artifacts
-  #       uses: actions/download-artifact@v4
+  #       uses: actions/download-artifact@v5
   #       with:
   #         path: collected-artifacts
 
