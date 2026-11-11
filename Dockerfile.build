@@ -1,7 +1,6 @@
 # Old-toolchain build environment. The base image's glibc caps the symbol
 # versions required by the resulting libur*.so (Ubuntu 18.04 -> glibc 2.27).
-ARG BASE_IMAGE=ubuntu:18.04
-FROM ${BASE_IMAGE}
+FROM ubuntu:18.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
