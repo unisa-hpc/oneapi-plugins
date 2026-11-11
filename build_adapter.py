@@ -49,6 +49,7 @@ def cmake_build_ur(
     build_type: str,
     jobs: int,
     clean: bool,
+    extra_cmake_args=(),
 ):
     ur_src = llvm_dir / "unified-runtime"
     if not ur_src.exists():
@@ -74,6 +75,7 @@ def cmake_build_ur(
         f"-DUR_BUILD_ADAPTER_HIP={'ON' if enable_hip else 'OFF'}",
         f"-DCMAKE_BUILD_TYPE={build_type}",
         f"-DCMAKE_INSTALL_PREFIX={install_prefix}",
+        *extra_cmake_args,
     ]
 
     run(cmake_args, cwd=str(build_dir))
@@ -166,6 +168,9 @@ def main():
     ap.add_argument("--build-type", default="Release", choices=["Release", "RelWithDebInfo", "Debug"],
                     help="CMake build type")
 
+    ap.add_argument("--cmake-arg", action="append", default=[],
+                    help="Extra argument passed to cmake (repeatable), e.g. -DCMAKE_C_FLAGS=...")
+
     ap.add_argument("--stub", required=True,
                     help="Path to installer stub script (must contain __PAYLOAD_B64_BELOW__)")
 
@@ -225,7 +230,8 @@ def main():
         enable_hip=enable_hip,
         build_type=args.build_type,
         jobs=args.jobs,
-        clean=args.clean
+        clean=args.clean,
+        extra_cmake_args=args.cmake_arg,
     )
 
     # Payload + installer
