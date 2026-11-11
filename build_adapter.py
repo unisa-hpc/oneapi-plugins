@@ -20,7 +20,9 @@ def ensure_dir(p: Path):
     p.mkdir(parents=True, exist_ok=True)
 
 
-def git_clone_or_update(repo_url: str, dest: Path, branch: str, depth: int = 1, update: bool = True):
+def git_clone_or_update(
+    repo_url: str, dest: Path, branch: str, depth: int = 1, update: bool = True
+):
     if not dest.exists():
         run(["git", "clone", repo_url, "-b", branch, f"--depth={depth}", str(dest)])
         return
@@ -53,7 +55,9 @@ def cmake_build_ur(
 ):
     ur_src = llvm_dir / "unified-runtime"
     if not ur_src.exists():
-        raise RuntimeError(f"Cannot find unified-runtime at {ur_src}. Is this the intel/llvm repo?")
+        raise RuntimeError(
+            f"Cannot find unified-runtime at {ur_src}. Is this the intel/llvm repo?"
+        )
 
     if clean and build_dir.exists():
         print(f"[*] Cleaning build dir: {build_dir}")
@@ -93,7 +97,9 @@ def make_payload_tar_gz(ur_install: Path, out_tar_gz: Path):
     # Include all libur*.so* (symlinks + versioned libs)
     libs = sorted(Path(p) for p in glob.glob(str(libdir / "libur*.so*")))
     if not libs:
-        raise RuntimeError(f"No libur*.so* found in {libdir}. Build/install likely failed.")
+        raise RuntimeError(
+            f"No libur*.so* found in {libdir}. Build/install likely failed."
+        )
 
     # Create temp payload layout: payload/lib/<libs>
     with tempfile.TemporaryDirectory() as tmp:
@@ -118,7 +124,9 @@ def make_payload_tar_gz(ur_install: Path, out_tar_gz: Path):
     print(f"[+] Created payload: {out_tar_gz}")
 
 
-def build_installer_from_stub(stub_path: Path, payload_tar_gz: Path, out_installer: Path):
+def build_installer_from_stub(
+    stub_path: Path, payload_tar_gz: Path, out_installer: Path
+):
     if not stub_path.exists():
         raise RuntimeError(f"Stub installer not found: {stub_path}")
     if not payload_tar_gz.exists():
@@ -153,35 +161,73 @@ def main():
     backend.add_argument("--cuda", action="store_true", help="Build UR CUDA adapter")
     backend.add_argument("--hip", action="store_true", help="Build UR HIP adapter")
 
-    ap.add_argument("-b", "--branch", required=True,
-                    help="intel/llvm branch or tag (e.g., v6.3.0)")
-    ap.add_argument("--workdir", default="work_ur_build",
-                    help="Working directory to place source/build/install artifacts")
-    ap.add_argument("--repo-url", default="https://github.com/intel/llvm",
-                    help="Git repo URL for intel/llvm")
-    ap.add_argument("--no-update", action="store_true",
-                    help="Do not git fetch/pull if repo already exists")
-    ap.add_argument("--clean", action="store_true",
-                    help="Delete build directory before building")
-    ap.add_argument("-j", "--jobs", type=int, default=os.cpu_count() or 8,
-                    help="Parallel build jobs")
-    ap.add_argument("--build-type", default="Release", choices=["Release", "RelWithDebInfo", "Debug"],
-                    help="CMake build type")
+    ap.add_argument(
+        "-b", "--branch", required=True, help="intel/llvm branch or tag (e.g., v6.3.0)"
+    )
+    ap.add_argument(
+        "--workdir",
+        default="work_ur_build",
+        help="Working directory to place source/build/install artifacts",
+    )
+    ap.add_argument(
+        "--repo-url",
+        default="https://github.com/intel/llvm",
+        help="Git repo URL for intel/llvm",
+    )
+    ap.add_argument(
+        "--no-update",
+        action="store_true",
+        help="Do not git fetch/pull if repo already exists",
+    )
+    ap.add_argument(
+        "--clean", action="store_true", help="Delete build directory before building"
+    )
+    ap.add_argument(
+        "-j",
+        "--jobs",
+        type=int,
+        default=os.cpu_count() or 8,
+        help="Parallel build jobs",
+    )
+    ap.add_argument(
+        "--build-type",
+        default="Release",
+        choices=["Release", "RelWithDebInfo", "Debug"],
+        help="CMake build type",
+    )
 
-    ap.add_argument("--cmake-arg", action="append", default=[],
-                    help="Extra argument passed to cmake (repeatable), e.g. -DCMAKE_C_FLAGS=...")
+    ap.add_argument(
+        "--cmake-arg",
+        action="append",
+        default=[],
+        help="Extra argument passed to cmake (repeatable), e.g. -DCMAKE_C_FLAGS=...",
+    )
 
-    ap.add_argument("--stub", required=True,
-                    help="Path to installer stub script (must contain __PAYLOAD_B64_BELOW__)")
+    ap.add_argument(
+        "--stub",
+        required=True,
+        help="Path to installer stub script (must contain __PAYLOAD_B64_BELOW__)",
+    )
 
-    ap.add_argument("--oneapi-version", default="2025.3",
-                    help="Used only to name the output installer file (you can customize naming)")
-    ap.add_argument("--os", dest="os_name", default="linux", help="Used only for naming")
+    ap.add_argument(
+        "--oneapi-version",
+        default="2025.3",
+        help="Used only to name the output installer file (you can customize naming)",
+    )
+    ap.add_argument(
+        "--os", dest="os_name", default="linux", help="Used only for naming"
+    )
     ap.add_argument("--arch", default="x86_64", help="Used only for naming")
-    ap.add_argument("--vendor", default=None,
-                    help="Override vendor label used in naming (default: nvidia for cuda, amd for hip)")
-    ap.add_argument("--out", default=None,
-                    help="Output installer path. If omitted, auto-named in workdir/out/")
+    ap.add_argument(
+        "--vendor",
+        default=None,
+        help="Override vendor label used in naming (default: nvidia for cuda, amd for hip)",
+    )
+    ap.add_argument(
+        "--out",
+        default=None,
+        help="Output installer path. If omitted, auto-named in workdir/out/",
+    )
 
     args = ap.parse_args()
 
@@ -202,9 +248,14 @@ def main():
     if args.out:
         out_installer = Path(args.out).resolve()
     else:
-        out_installer = out_dir / f"oneapi-ur-{backend_name}-{args.os_name}-{args.arch}-{args.oneapi_version}.sh"
+        out_installer = (
+            out_dir
+            / f"oneapi-ur-{backend_name}-{args.os_name}-{args.arch}-{args.oneapi_version}.sh"
+        )
 
-    payload_tar = out_dir / f"ur_adapter_payload_{backend_name}_{args.oneapi_version}.tar.gz"
+    payload_tar = (
+        out_dir / f"ur_adapter_payload_{backend_name}_{args.oneapi_version}.tar.gz"
+    )
 
     print("[*] Settings")
     print(f"    backend: {backend_name} (vendor={vendor})")
@@ -218,7 +269,7 @@ def main():
         dest=src_dir,
         branch=args.branch,
         depth=1,
-        update=not args.no_update
+        update=not args.no_update,
     )
 
     # Build/install UR
@@ -247,7 +298,9 @@ if __name__ == "__main__":
     try:
         main()
     except subprocess.CalledProcessError as e:
-        print(f"\n[ERROR] Command failed with exit code {e.returncode}", file=sys.stderr)
+        print(
+            f"\n[ERROR] Command failed with exit code {e.returncode}", file=sys.stderr
+        )
         sys.exit(e.returncode)
     except Exception as e:
         print(f"\n[ERROR] {e}", file=sys.stderr)
