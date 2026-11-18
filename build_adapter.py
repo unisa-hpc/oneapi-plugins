@@ -30,9 +30,14 @@ def git_clone_or_update(repo_url: str, dest: Path, branch: str, depth: int = 1, 
         return
 
     # Best-effort update to requested branch
-    run(["git", "fetch", "--all", "--tags"], cwd=str(dest))
+    # --force lets moving upstream tags (e.g. sycl-web/*) overwrite local copies
+    run(["git", "fetch", "--all", "--tags", "--force"], cwd=str(dest))
     run(["git", "checkout", branch], cwd=str(dest))
-    run(["git", "pull", "--ff-only"], cwd=str(dest))
+    # Detached HEAD (a tag) has nothing to pull
+    on_branch = subprocess.run(["git", "symbolic-ref", "-q", "HEAD"], cwd=str(dest),
+                               stdout=subprocess.DEVNULL).returncode == 0
+    if on_branch:
+        run(["git", "pull", "--ff-only"], cwd=str(dest))
 
 
 def cmake_build_ur(
