@@ -24,6 +24,8 @@ jobs:
             SYCL_VERSION: "6.2.1"
           - ONEAPI_VERSION: "2025.3"
             SYCL_VERSION: "6.3.0"
+          - ONEAPI_VERSION: "2026.0"
+            SYCL_VERSION: "7.0.0"
 
     steps:
       - name: Checkout
