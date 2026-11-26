@@ -28,9 +28,9 @@ jobs:
             SYCL_VERSION: "6.3.0"
           - ONEAPI_VERSION: "2026.0"
             SYCL_VERSION: "7.0.0"
-          - ONEAPI_VERSION: "2026.1.0"
+          - ONEAPI_VERSION: "2026.1"
             SYCL_VERSION: "7.1.1"
-          - ONEAPI_VERSION: "2026.2.0"
+          - ONEAPI_VERSION: "2026.2"
             SYCL_VERSION: "7.2.0"
 
     steps:
