@@ -11,6 +11,8 @@ env:
   MAX_GLIBC: "2.27"
   # glibc < 2.28 headers lack these (needed by UMF); values are the stable Linux x86 kernel ABI.
   EXTRA_C_FLAGS: "-DCMAKE_C_FLAGS=-DMAP_SHARED_VALIDATE=0x03 -DMAP_SYNC=0x80000"
+  # glibc < 2.30 headers lack MAP_FIXED_NOREPLACE (used by the UR sanitizer layer, C++).
+  EXTRA_CXX_FLAGS: "-DCMAKE_CXX_FLAGS=-DMAP_FIXED_NOREPLACE=0x100000"
 
 jobs:
   build:
@@ -28,6 +30,8 @@ jobs:
             SYCL_VERSION: "7.0.0"
           - ONEAPI_VERSION: "2026.1.0"
             SYCL_VERSION: "7.1.1"
+          - ONEAPI_VERSION: "2026.2.0"
+            SYCL_VERSION: "7.2.0"
 
     steps:
       - name: Checkout
@@ -46,6 +50,7 @@ jobs:
               --oneapi-version ${{ matrix.ONEAPI_VERSION }} \
               --stub ./oneapi-ur-adapter.stub.sh \
               --cmake-arg="${EXTRA_C_FLAGS}" \
+              --cmake-arg="${EXTRA_CXX_FLAGS}" \
               -j$(nproc)
 
       - name: Check glibc requirements
